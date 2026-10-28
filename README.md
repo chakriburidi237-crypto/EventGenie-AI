@@ -6,6 +6,8 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://event-genie-ai-five.vercel.app)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-EventGenie--AI-181717?style=for-the-badge&logo=github)](https://github.com/chakriburidi237-crypto/EventGenie-AI)
+[![Tests Passing](https://img.shields.io/badge/Tests-36%20Passed%20%7C%205%20Suites-brightgreen?style=for-the-badge&logo=node.js)](https://github.com/chakriburidi237-crypto/EventGenie-AI)
+[![Code Quality](https://img.shields.io/badge/ESLint-0%20Errors%20%7C%200%20Warnings-blue?style=for-the-badge&logo=eslint)](https://github.com/chakriburidi237-crypto/EventGenie-AI)
 [![Framework](https://img.shields.io/badge/Next.js-16%20%7C%20React%2019-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![AI Powered](https://img.shields.io/badge/Google%20Gemini-gemini--2.5--flash-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
 
@@ -19,9 +21,9 @@ EventGenie AI is a full-stack, AI-powered event planning web application built f
 
 ## 🎥 Project Demo Video
 
-A walkthrough demonstration is bundled directly in the repository:
-- **MP4 Video File**: [`demo_video.mp4`](./demo_video.mp4) or via public path [`public/demo_video.mp4`](./public/demo_video.mp4)
-- *Ready for submission on YouTube / Google Drive or direct playback.*
+A walkthrough demonstration is available via streaming and bundled directly in the repository:
+- **Cloud Streaming Link (Google Drive)**: [Watch Project Demo Video](https://drive.google.com/file/d/1amokBPxoQTFndGxMPSRmevFCqHIJgVwO/view?usp=sharing)
+- **Direct Repository File**: [`demo_video.mp4`](./demo_video.mp4) or via web path [`public/demo_video.mp4`](./public/demo_video.mp4)
 
 ---
 
@@ -127,7 +129,7 @@ A walkthrough demonstration is bundled directly in the repository:
 
 ## 🧪 Automated Testing
 
-Automated tests cover all critical budget calculations (totals, actuals, remaining, percentages, over-budget detection, AI allocation mapping) and event setup validation rules.
+Automated tests cover all critical event planning subsystems: AI resilience & fallback schemas, guest analytics, timeline milestones, budget calculations, and strict validation guards.
 
 Run the test suite:
 ```bash
@@ -136,10 +138,15 @@ npm test
 
 Expected output:
 ```
-✔ Smart Budget Planner Calculations (9 tests)
-✔ Event Setup Input Validation (5 tests)
-ℹ tests 14
-ℹ pass 14
+▶ AI Resilience & Offline Fallback Reliability (4 tests)
+▶ Smart Budget Planner Calculations (9 tests)
+▶ Guest Management & Analytics Calculations (6 tests)
+▶ Event Timeline & Milestone Management (7 tests)
+▶ Event Setup Input Validation (10 tests)
+ℹ tests 36
+ℹ suites 5
+ℹ pass 36
+ℹ fail 0
 ```
 
 ---
