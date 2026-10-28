@@ -1,6 +1,6 @@
 'use client';
 
-import { FullEvent, EventSetup, TimelineTask, Vendor, BudgetPlan, AIEventPlan } from './types';
+import { FullEvent, EventSetup, TimelineTask, Vendor, Guest, BudgetPlan, AIEventPlan } from './types';
 import { createDefaultBudgetPlan } from './budget';
 import { getDemoEvent, generateId } from './demo-data';
 
@@ -52,6 +52,7 @@ export function createEvent(setup: Omit<EventSetup, 'id' | 'createdAt' | 'update
     budget: createDefaultBudgetPlan(setup.totalBudget, setup.currency),
     tasks: [],
     vendors: [],
+    guests: [],
     isDemo: false,
   };
   const events = getStoredEvents();
@@ -147,10 +148,38 @@ export function deleteVendor(eventId: string, vendorId: string): void {
   updateEvent(eventId, { vendors: event.vendors });
 }
 
+// ─── Guests ───
+
+export function addGuest(eventId: string, guest: Omit<Guest, 'id' | 'eventId'>): Guest {
+  const event = getEventById(eventId);
+  if (!event) throw new Error('Event not found');
+  const newGuest: Guest = { ...guest, id: generateId(), eventId };
+  if (!event.guests) event.guests = [];
+  event.guests.push(newGuest);
+  updateEvent(eventId, { guests: event.guests });
+  return newGuest;
+}
+
+export function updateGuest(eventId: string, guestId: string, updates: Partial<Guest>): void {
+  const event = getEventById(eventId);
+  if (!event) return;
+  if (!event.guests) event.guests = [];
+  event.guests = event.guests.map(g => g.id === guestId ? { ...g, ...updates } : g);
+  updateEvent(eventId, { guests: event.guests });
+}
+
+export function deleteGuest(eventId: string, guestId: string): void {
+  const event = getEventById(eventId);
+  if (!event) return;
+  if (!event.guests) return;
+  event.guests = event.guests.filter(g => g.id !== guestId);
+  updateEvent(eventId, { guests: event.guests });
+}
+
 // ─── Export ───
 
 export function exportEventToText(event: FullEvent): string {
-  const { setup, plan, budget, tasks, vendors } = event;
+  const { setup, plan, budget, tasks, vendors, guests } = event;
   const lines: string[] = [];
 
   lines.push('═══════════════════════════════════════════');
@@ -228,6 +257,15 @@ export function exportEventToText(event: FullEvent): string {
     vendors.forEach(v => {
       lines.push(`  ${v.serviceCategory}: ${v.name || '(not assigned)'} — Status: ${v.bookingStatus} — Est: ${budget.currency} ${v.estimatedCost.toLocaleString()}`);
       if (v.contactNotes) lines.push(`    Notes: ${v.contactNotes}`);
+    });
+    lines.push('');
+  }
+
+  if (guests && guests.length > 0) {
+    lines.push('───────── GUEST LIST ─────────');
+    lines.push(`Total Guests: ${guests.length}`);
+    guests.forEach(g => {
+      lines.push(`  • ${g.name} — [${g.rsvpStatus.toUpperCase()}] ${g.plusOnes > 0 ? `(+${g.plusOnes})` : ''} ${g.dietaryRestrictions ? `| Dietary: ${g.dietaryRestrictions}` : ''}`);
     });
     lines.push('');
   }

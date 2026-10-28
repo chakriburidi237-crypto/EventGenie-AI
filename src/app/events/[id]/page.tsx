@@ -20,11 +20,14 @@ import {
   Plus,
   Trash2,
   TrendingDown,
-  Edit3
+  Edit3,
+  Printer,
+  UserCheck,
 } from 'lucide-react';
 import { FullEvent, AIEventPlan, TimelineTask, Vendor, TaskPriority, TaskStatus, BookingStatus } from '@/lib/types';
 import { getEventById, updateEvent, saveEventPlan, addTask, updateTask, deleteTask, addVendor, updateVendor, deleteVendor, exportEventToText, initializeStore } from '@/lib/store';
 import { calculateTotalEstimated, calculateTotalActual, calculateRemainingBudget, isOverBudget, formatCurrency, applyAIBudgetAllocations } from '@/lib/budget';
+import { useToast } from '@/components/Toast';
 
 export default function EventDetailPage(props: { params: Promise<{ id: string }> }) {
   return (
@@ -37,9 +40,14 @@ export default function EventDetailPage(props: { params: Promise<{ id: string }>
 function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
+  const { addToast } = useToast();
   const [event, setEvent] = useState<FullEvent | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<'plan' | 'budget' | 'timeline' | 'vendors' | 'optimize'>('plan');
+  
+  function handlePrint() {
+    window.print();
+  }
   
   // AI Generation states
   const [isGenerating, setIsGenerating] = useState(false);
@@ -144,11 +152,12 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
       const data = await res.json();
       if (data.success && data.data) {
         setOptimizationResult(data.data);
+        addToast('Budget optimization suggestions ready!', 'success');
       } else {
-        alert(data.error || 'Optimization unavailable.');
+        addToast(data.error || 'Optimization unavailable.', 'error');
       }
     } catch {
-      alert('AI optimizer service error.');
+      addToast('AI optimizer service error.', 'error');
     } finally {
       setIsOptimizing(false);
     }
@@ -170,7 +179,7 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
       budget: { ...event.budget, categories: updated }
     });
     refreshEvent();
-    alert('Optimized budget allocations applied!');
+    addToast('Optimized budget allocations applied!', 'success');
     setActiveTab('budget');
   }
 
@@ -184,6 +193,7 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
     a.download = `${event.setup.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_plan.txt`;
     a.click();
     URL.revokeObjectURL(url);
+    addToast('Event plan exported as text file!', 'success');
   }
 
   function handleCreateTask(e: React.FormEvent) {
@@ -269,12 +279,25 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link
+            href="/guests"
+            className="flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition shadow-sm"
+          >
+            <UserCheck size={16} className="text-emerald-500" /> Guests ({event.guests?.length || 0})
+          </Link>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition shadow-sm"
+            title="Print-friendly view"
+          >
+            <Printer size={16} /> Print
+          </button>
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition shadow-sm"
           >
-            <Download size={16} /> Export Plan
+            <Download size={16} /> Export
           </button>
           {!plan && (
             <button

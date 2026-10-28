@@ -126,6 +126,21 @@ export interface AIThemeIdea {
   suitableFor: string[];
 }
 
+export type RSVPStatus = 'invited' | 'confirmed' | 'declined' | 'attending';
+
+export interface Guest {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  rsvpStatus: RSVPStatus;
+  dietaryRestrictions: string;
+  plusOnes: number;
+  tableNumber?: string;
+  notes: string;
+  eventId: string;
+}
+
 // ─── Full Event with all data ───
 
 export interface FullEvent {
@@ -134,6 +149,7 @@ export interface FullEvent {
   budget: BudgetPlan;
   tasks: TimelineTask[];
   vendors: Vendor[];
+  guests?: Guest[];
   isDemo: boolean;
 }
 

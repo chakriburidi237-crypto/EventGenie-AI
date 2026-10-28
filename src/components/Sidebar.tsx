@@ -13,8 +13,11 @@ import {
   Menu,
   X,
   Gem,
+  UserCheck,
+  Moon,
+  Sun,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const navItems = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
@@ -22,6 +25,7 @@ const navItems = [
   { href: '/events', label: 'My Events', icon: CalendarDays },
   { href: '/budget', label: 'Budget Planner', icon: Wallet },
   { href: '/timeline', label: 'Timeline', icon: ListChecks },
+  { href: '/guests', label: 'Guest List', icon: UserCheck },
   { href: '/vendors', label: 'Vendors', icon: Users },
   { href: '/ideas', label: 'AI Ideas', icon: Sparkles },
 ];
@@ -29,6 +33,31 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial dark mode preference
+    const saved = localStorage.getItem('eventgenie_theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDark(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('eventgenie_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('eventgenie_theme', 'light');
+    }
+  };
 
   return (
     <>
@@ -56,7 +85,7 @@ export default function Sidebar() {
         } lg:translate-x-0`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-700/50">
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg">
             <Gem size={20} className="text-white" />
           </div>
@@ -98,9 +127,22 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-700/50">
-          <p className="text-[11px] text-slate-500 leading-relaxed">
+        {/* Dark Mode & Footer */}
+        <div className="px-5 py-4 border-t border-slate-800 space-y-3">
+          <button
+            onClick={toggleDarkMode}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition"
+          >
+            <span className="flex items-center gap-2">
+              {isDark ? <Moon size={15} className="text-indigo-400" /> : <Sun size={15} className="text-amber-400" />}
+              <span>{isDark ? 'Dark Theme' : 'Light Theme'}</span>
+            </span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              Toggle
+            </span>
+          </button>
+
+          <p className="text-[11px] text-slate-500 leading-relaxed px-1">
             Plan Smarter. Celebrate Better.
             <br />
             <span className="text-slate-600">Powered by AI</span>

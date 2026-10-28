@@ -135,6 +135,13 @@ export function getDemoEvent(): FullEvent {
       { id: 'demo-vendor-2', name: '', serviceCategory: 'Catering', bookingStatus: 'quoted' as const, contactNotes: 'Tasting scheduled', estimatedCost: 12500, phone: '', email: '', eventId },
       { id: 'demo-vendor-3', name: '', serviceCategory: 'Photography', bookingStatus: 'contacted' as const, contactNotes: 'Reviewing portfolio', estimatedCost: 6000, phone: '', email: '', eventId },
     ],
+    guests: [
+      { id: 'demo-guest-1', name: 'Eleanor Vance', email: 'eleanor.v@example.com', phone: '+1 555-0192', rsvpStatus: 'confirmed', dietaryRestrictions: 'Vegetarian', plusOnes: 1, tableNumber: 'Table 1', notes: 'Close friend of bride', eventId },
+      { id: 'demo-guest-2', name: 'Marcus Sterling', email: 'marcus.s@example.com', phone: '+1 555-0143', rsvpStatus: 'attending', dietaryRestrictions: 'None', plusOnes: 0, tableNumber: 'Table 2', notes: 'Groomsman', eventId },
+      { id: 'demo-guest-3', name: 'Sophia Chen', email: 'sophia.c@example.com', phone: '+1 555-0188', rsvpStatus: 'confirmed', dietaryRestrictions: 'Gluten-Free', plusOnes: 1, tableNumber: 'Table 1', notes: 'Needs accessible seating', eventId },
+      { id: 'demo-guest-4', name: 'Liam Davies', email: 'liam.d@example.com', phone: '+1 555-0112', rsvpStatus: 'invited', dietaryRestrictions: 'Vegan', plusOnes: 0, tableNumber: 'Table 3', notes: '', eventId },
+      { id: 'demo-guest-5', name: 'Chloe Dubois', email: 'chloe.d@example.com', phone: '+1 555-0176', rsvpStatus: 'declined', dietaryRestrictions: 'None', plusOnes: 0, tableNumber: '', notes: 'Traveling abroad', eventId },
+    ],
     isDemo: true,
   };
 }
