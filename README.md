@@ -4,6 +4,15 @@
 > 
 > *PromptWars Virtual — Challenge 5 Champion Edition*
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://event-genie-ai-five.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-EventGenie--AI-181717?style=for-the-badge&logo=github)](https://github.com/chakriburidi237-crypto/EventGenie-AI)
+[![Framework](https://img.shields.io/badge/Next.js-16%20%7C%20React%2019-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![AI Powered](https://img.shields.io/badge/Google%20Gemini-gemini--2.5--flash-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
+
+### 🚀 Live Deployment
+- **Primary Production URL**: [https://event-genie-ai-five.vercel.app](https://event-genie-ai-five.vercel.app)
+- **Direct Deployment URL**: [https://event-genie-e68kyy0pd-chakriburidi237-7592s-projects.vercel.app](https://event-genie-e68kyy0pd-chakriburidi237-7592s-projects.vercel.app)
+
 EventGenie AI is a full-stack, AI-powered event planning web application built for weddings, birthdays, community celebrations, and corporate gatherings. It solves common event planning bottlenecks: budget allocation, preparation timelines, vendor coordination, guest RSVPs, task tracking, and personalized creative ideas.
 
 ---
