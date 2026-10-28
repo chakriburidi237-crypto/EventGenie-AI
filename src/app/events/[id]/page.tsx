@@ -235,10 +235,10 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
 
   if (!event) {
     return (
-      <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+      <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
         <AlertCircle size={48} className="text-amber-500 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-slate-900">Event Not Found</h2>
-        <p className="text-slate-500 mt-1 mb-6">The requested event does not exist or was deleted.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Event Not Found</h2>
+        <p className="text-slate-500 dark:text-slate-400 mt-1 mb-6">The requested event does not exist or was deleted.</p>
         <Link href="/events" className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold">
           Back to Events
         </Link>
@@ -258,19 +258,19 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
       {/* Top Breadcrumb & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link href="/events" className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors">
+          <Link href="/events" className="p-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
             <ArrowLeft size={20} />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{setup.eventName}</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{setup.eventName}</h1>
               {event.isDemo && (
-                <span className="text-[11px] font-bold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full border border-amber-300">
+                <span className="text-[11px] font-bold px-2 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 rounded-full border border-amber-300 dark:border-amber-800">
                   DEMO SAMPLE
                 </span>
               )}
             </div>
-            <p className="text-sm text-slate-500 flex items-center gap-2 mt-0.5 capitalize">
+            <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5 capitalize">
               <span>{setup.eventType}</span> · 
               <span className="flex items-center gap-1"><MapPin size={14} />{setup.location}</span> · 
               <span className="flex items-center gap-1"><CalendarDays size={14} />{setup.eventDate}</span>
@@ -389,11 +389,11 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
 
               {/* Ideas Sections */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                     🎨 Decoration Ideas
                   </h4>
-                  <ul className="space-y-2 text-sm text-slate-600">
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                     {plan.decorationIdeas.map((idea, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-indigo-500 font-bold">•</span>
@@ -403,11 +403,11 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
                   </ul>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                     🍽 Food & Catering
                   </h4>
-                  <ul className="space-y-2 text-sm text-slate-600">
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                     {plan.foodSuggestions.map((food, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-indigo-500 font-bold">•</span>
@@ -417,11 +417,11 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
                   </ul>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                     🎵 Entertainment
                   </h4>
-                  <ul className="space-y-2 text-sm text-slate-600">
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                     {plan.entertainmentIdeas.map((ent, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-indigo-500 font-bold">•</span>
@@ -433,13 +433,13 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
               </div>
 
               {/* Recommendations */}
-              <div className="bg-gradient-to-br from-indigo-50 to-cyan-50 p-6 rounded-2xl border border-indigo-100">
-                <h4 className="font-bold text-indigo-950 mb-3 flex items-center gap-2">
-                  <Sparkles size={18} className="text-indigo-600" /> Personalized Recommendations
+              <div className="bg-gradient-to-br from-indigo-50 to-cyan-50 dark:from-indigo-950/40 dark:to-cyan-950/30 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-900/60">
+                <h4 className="font-bold text-indigo-950 dark:text-indigo-200 mb-3 flex items-center gap-2">
+                  <Sparkles size={18} className="text-indigo-600 dark:text-indigo-400" /> Personalized Recommendations
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {plan.personalizedRecommendations.map((rec, i) => (
-                    <div key={i} className="bg-white/80 backdrop-blur p-3.5 rounded-xl border border-indigo-100/50 text-sm text-slate-700">
+                    <div key={i} className="bg-white/80 dark:bg-slate-900/80 backdrop-blur p-3.5 rounded-xl border border-indigo-100/50 dark:border-indigo-800/50 text-sm text-slate-700 dark:text-slate-200">
                       {rec}
                     </div>
                   ))}
@@ -455,17 +455,17 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
         <div className="space-y-6">
           {/* Summary Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <span className="text-xs font-semibold text-slate-400 uppercase">Total Budget</span>
-              <p className="text-xl font-bold text-slate-900 mt-1">{formatCurrency(budget.totalBudget, budget.currency)}</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white mt-1">{formatCurrency(budget.totalBudget, budget.currency)}</p>
             </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <span className="text-xs font-semibold text-slate-400 uppercase">Estimated Total</span>
-              <p className="text-xl font-bold text-indigo-600 mt-1">{formatCurrency(totalEstimated, budget.currency)}</p>
+              <p className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">{formatCurrency(totalEstimated, budget.currency)}</p>
             </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <span className="text-xs font-semibold text-slate-400 uppercase">Actual Spent</span>
-              <p className="text-xl font-bold text-slate-800 mt-1">{formatCurrency(totalActual, budget.currency)}</p>
+              <p className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-1">{formatCurrency(totalActual, budget.currency)}</p>
             </div>
             <div className={`p-4 rounded-xl border shadow-sm ${overBudget ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
               <span className="text-xs font-semibold uppercase text-slate-500">Remaining</span>
@@ -673,8 +673,8 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">Vendor Checklist</h3>
-              <p className="text-xs text-slate-500">Manage vendors, quotes, and booking status. Fictional businesses are never auto-assigned.</p>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Vendor Checklist</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Manage vendors, quotes, and booking status. Fictional businesses are never auto-assigned.</p>
             </div>
             <button
               onClick={() => setShowVendorModal(true)}
@@ -685,21 +685,21 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
           </div>
 
           {vendors.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-slate-200">
-              <Users2 size={36} className="text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 font-semibold text-sm">No vendors tracked yet.</p>
-              <p className="text-slate-400 text-xs mt-1">Add your venue, caterer, photographer or decorator contacts.</p>
+            <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <Users2 size={36} className="text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+              <p className="text-slate-600 dark:text-slate-300 font-semibold text-sm">No vendors tracked yet.</p>
+              <p className="text-slate-400 dark:text-slate-500 text-xs mt-1">Add your venue, caterer, photographer or decorator contacts.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {vendors.map((vendor) => (
-                <div key={vendor.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div key={vendor.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider block">
+                      <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
                         {vendor.serviceCategory}
                       </span>
-                      <h4 className="font-bold text-slate-900 text-base">
+                      <h4 className="font-bold text-slate-900 dark:text-white text-base">
                         {vendor.name || '(Vendor name not assigned)'}
                       </h4>
                     </div>
@@ -708,25 +708,25 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
                     </span>
                   </div>
 
-                  <div className="text-xs text-slate-600 space-y-1">
-                    <p><span className="font-semibold">Est. Cost:</span> {formatCurrency(vendor.estimatedCost, setup.currency)}</p>
-                    {vendor.phone && <p><span className="font-semibold">Phone:</span> {vendor.phone}</p>}
-                    {vendor.email && <p><span className="font-semibold">Email:</span> {vendor.email}</p>}
+                  <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                    <p><span className="font-semibold text-slate-700 dark:text-slate-200">Est. Cost:</span> {formatCurrency(vendor.estimatedCost, setup.currency)}</p>
+                    {vendor.phone && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Phone:</span> {vendor.phone}</p>}
+                    {vendor.email && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Email:</span> {vendor.email}</p>}
                     {vendor.contactNotes && (
-                      <p className="bg-slate-50 p-2 rounded-lg text-slate-600 italic mt-2">
+                      <p className="bg-slate-50 dark:bg-slate-800/80 p-2 rounded-lg text-slate-600 dark:text-slate-300 italic mt-2">
                         "{vendor.contactNotes}"
                       </p>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+                  <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-3">
                     <select
                       value={vendor.bookingStatus}
                       onChange={(e) => {
                         updateVendor(event.setup.id, vendor.id, { bookingStatus: e.target.value as BookingStatus });
                         refreshEvent();
                       }}
-                      className="text-xs border border-slate-200 rounded-lg px-2 py-1 text-slate-700 bg-white"
+                      className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800"
                     >
                       <option value="contacted">Contacted</option>
                       <option value="quoted">Quoted</option>
@@ -779,32 +779,32 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
             <div className="flex items-center gap-6 p-4 bg-slate-50 rounded-xl text-sm border border-slate-200/80 mb-6">
               <div>
                 <span className="text-xs text-slate-400 block">Total Budget:</span>
-                <span className="font-bold text-slate-800">{formatCurrency(budget.totalBudget, budget.currency)}</span>
+                <span className="font-bold text-slate-800 dark:text-white">{formatCurrency(budget.totalBudget, budget.currency)}</span>
               </div>
               <div>
                 <span className="text-xs text-slate-400 block">Current Estimated:</span>
-                <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-slate-800'}`}>
+                <span className={`font-bold ${overBudget ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-white'}`}>
                   {formatCurrency(totalEstimated, budget.currency)}
                 </span>
               </div>
               <div>
                 <span className="text-xs text-slate-400 block">Status:</span>
-                <span className={`font-semibold ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}>
+                <span className={`font-semibold ${overBudget ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                   {overBudget ? `Over by ${formatCurrency(totalEstimated - budget.totalBudget, budget.currency)}` : 'Within Budget'}
                 </span>
               </div>
             </div>
 
             {optimizationResult && (
-              <div className="space-y-6 border-t border-slate-100 pt-6 animate-fade-in">
-                <div className="p-4 bg-indigo-50/70 border border-indigo-100 rounded-xl">
-                  <h4 className="text-sm font-bold text-indigo-950 mb-1">AI Recommendation Summary</h4>
-                  <p className="text-sm text-indigo-800">{optimizationResult.summary}</p>
+              <div className="space-y-6 border-t border-slate-100 dark:border-slate-800 pt-6 animate-fade-in">
+                <div className="p-4 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 rounded-xl">
+                  <h4 className="text-sm font-bold text-indigo-950 dark:text-indigo-200 mb-1">AI Recommendation Summary</h4>
+                  <p className="text-sm text-indigo-800 dark:text-indigo-300">{optimizationResult.summary}</p>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                    <thead className="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs uppercase border-b border-slate-200 dark:border-slate-700">
                       <tr>
                         <th className="py-2.5 px-3 font-semibold">Category</th>
                         <th className="py-2.5 px-3 font-semibold">Current Est.</th>
@@ -813,25 +813,25 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
                         <th className="py-2.5 px-3 font-semibold">Strategy</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                       {optimizationResult.adjustments.map((adj, i) => (
-                        <tr key={i} className="hover:bg-slate-50/50">
-                          <td className="py-2.5 px-3 font-medium text-slate-800">{adj.category}</td>
-                          <td className="py-2.5 px-3 text-slate-500">{formatCurrency(adj.originalAmount, budget.currency)}</td>
-                          <td className="py-2.5 px-3 font-bold text-indigo-600">{formatCurrency(adj.proposedAmount, budget.currency)}</td>
-                          <td className="py-2.5 px-3 font-semibold text-emerald-600">
+                        <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                          <td className="py-2.5 px-3 font-medium text-slate-800 dark:text-slate-200">{adj.category}</td>
+                          <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400">{formatCurrency(adj.originalAmount, budget.currency)}</td>
+                          <td className="py-2.5 px-3 font-bold text-indigo-600 dark:text-indigo-400">{formatCurrency(adj.proposedAmount, budget.currency)}</td>
+                          <td className="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">
                             +{formatCurrency(adj.originalAmount - adj.proposedAmount, budget.currency)}
                           </td>
-                          <td className="py-2.5 px-3 text-xs text-slate-600">{adj.suggestion}</td>
+                          <td className="py-2.5 px-3 text-xs text-slate-600 dark:text-slate-300">{adj.suggestion}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-                  <p className="text-sm font-bold text-slate-800">
-                    Total Potential Savings: <span className="text-emerald-600 font-extrabold">{formatCurrency(optimizationResult.totalSavings, budget.currency)}</span>
+                <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+                  <p className="text-sm font-bold text-slate-800 dark:text-white">
+                    Total Potential Savings: <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{formatCurrency(optimizationResult.totalSavings, budget.currency)}</span>
                   </p>
                   <button
                     onClick={applyOptimizedAllocations}

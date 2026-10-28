@@ -77,5 +77,7 @@ describe('Smart Budget Planner Calculations', () => {
   it('formats currency cleanly', () => {
     const usd = formatCurrency(15000, 'USD');
     assert.ok(usd.includes('15,000'));
+    const inr = formatCurrency(50000, 'INR');
+    assert.ok(inr.includes('50,000') || inr.includes('50000'));
   });
 });

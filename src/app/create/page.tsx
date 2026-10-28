@@ -40,7 +40,7 @@ const eventTypes: { value: EventType; label: string; emoji: string }[] = [
   { value: 'other', label: 'Other / Custom', emoji: '🎉' },
 ];
 
-const currencies = ['USD', 'EUR', 'GBP', 'INR', 'AUD', 'CAD', 'JPY', 'CNY'];
+const currencies = ['INR', 'USD', 'EUR', 'GBP', 'AUD', 'CAD', 'JPY', 'CNY'];
 
 // Quick Reference suggestion presets
 const LOCATION_PRESETS = [
@@ -84,7 +84,7 @@ const SHOWCASE_EVENTS = [
     date: 'June 20, 2026',
     location: 'Botanical Gardens, Austin TX',
     guests: 120,
-    budget: '$50,000 USD',
+    budget: '₹50,000 INR',
     client: 'Sarah Jenkins',
     rating: 5,
     testimonial: 'The AI budget allocation and timeline milestones saved us months of anxiety. Our guests are already raving about the interactive RSVP form!',
@@ -96,7 +96,7 @@ const SHOWCASE_EVENTS = [
     date: 'Nov 14, 2026 (Active)',
     location: 'Metropolitan Convention Center, NYC',
     guests: 350,
-    budget: '$120,000 USD',
+    budget: '₹1,20,000 INR',
     client: 'David K. Vance',
     rating: 5,
     testimonial: 'Coordinating 350 tech executives with custom dietary needs and breakout schedules was automated effortlessly with EventGenie AI.',
@@ -108,7 +108,7 @@ const SHOWCASE_EVENTS = [
     date: 'Celebrated Sep 15, 2025',
     location: 'Villa Bellavista, Napa Valley CA',
     guests: 85,
-    budget: '$38,000 USD',
+    budget: '₹38,000 INR',
     client: 'Elena & Marcus Rossi',
     rating: 5,
     testimonial: 'Executed to absolute perfection. 100% on schedule and under budget. The AI-suggested Italian wine pairing was an absolute sensation.',
@@ -124,7 +124,7 @@ export default function CreateEventPage() {
     location: '',
     guestCount: '',
     totalBudget: '',
-    currency: 'USD',
+    currency: 'INR',
     theme: '',
     foodPreferences: '',
     venuePreference: '' as VenuePreference | '',

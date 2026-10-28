@@ -90,6 +90,26 @@ html.dark body {
   color: #f8fafc !important;
 }
 
+/* Ensure high contrast for all slate text in dark mode */
+html.dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-800 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4 {
+  color: #f8fafc;
+}
+
 /* ─── Universal Form Controls ─── */
 .form-input {
   width: 100%;

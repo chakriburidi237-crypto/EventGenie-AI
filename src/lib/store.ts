@@ -12,7 +12,23 @@ function getStoredEvents(): FullEvent[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const events: FullEvent[] = JSON.parse(raw);
+    let migrated = false;
+    events.forEach(e => {
+      if (e.setup && e.setup.currency === 'USD') {
+        e.setup.currency = 'INR';
+        migrated = true;
+      }
+      if (e.budget && e.budget.currency === 'USD') {
+        e.budget.currency = 'INR';
+        migrated = true;
+      }
+    });
+    if (migrated) {
+      saveEvents(events);
+    }
+    return events;
   } catch {
     return [];
   }
@@ -27,7 +43,12 @@ function saveEvents(events: FullEvent[]): void {
 
 export function initializeStore(): void {
   const events = getStoredEvents();
-  if (events.length === 0 || !events[0].guests || events[0].guests.length === 0) {
+  if (
+    events.length === 0 ||
+    !events[0].guests ||
+    events[0].guests.length === 0 ||
+    events[0].setup?.currency === 'USD'
+  ) {
     const portfolio = getInitialDemoEvents();
     saveEvents(portfolio);
   }

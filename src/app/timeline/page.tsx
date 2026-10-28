@@ -55,10 +55,10 @@ export default function TimelinePage() {
 
   if (!selectedEvent) {
     return (
-      <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-        <ListChecks size={48} className="text-slate-300 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-slate-900">No Events Found</h2>
-        <p className="text-slate-500 text-sm mt-1 mb-6">Create an event to start managing preparation timelines and tasks.</p>
+      <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <ListChecks size={48} className="text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">No Events Found</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-6">Create an event to start managing preparation timelines and tasks.</p>
         <Link href="/create" className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold">
           Create Event
         </Link>
@@ -73,8 +73,8 @@ export default function TimelinePage() {
     <div className="space-y-8 animate-fade-in pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Timeline & Task Manager</h1>
-          <p className="text-slate-500 mt-1">Stay organized with categorized milestones and deadlines.</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Timeline & Task Manager</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Stay organized with categorized milestones and deadlines.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export default function TimelinePage() {
             <select
               value={selectedEventId}
               onChange={(e) => setSelectedEventId(e.target.value)}
-              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 outline-none focus:border-indigo-500"
+              className="px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-indigo-500"
             >
               {events.map(ev => (
                 <option key={ev.setup.id} value={ev.setup.id}>{ev.setup.eventName}</option>
@@ -100,15 +100,15 @@ export default function TimelinePage() {
       </div>
 
       {/* Progress banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-4">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between flex-wrap gap-4">
         <div>
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Progress</span>
-          <h3 className="text-lg font-bold text-slate-900">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
             {completed} of {tasks.length} tasks completed ({tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0}%)
           </h3>
         </div>
 
-        <div className="w-full sm:w-64 h-3 bg-slate-100 rounded-full overflow-hidden">
+        <div className="w-full sm:w-64 h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-300"
             style={{ width: `${tasks.length > 0 ? (completed / tasks.length) * 100 : 0}%` }}
@@ -118,13 +118,13 @@ export default function TimelinePage() {
 
       {/* Task list */}
       {tasks.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <ListChecks size={40} className="text-slate-300 mx-auto mb-2" />
-          <h3 className="font-bold text-slate-800">No Tasks Yet</h3>
-          <p className="text-xs text-slate-500 mt-1 mb-4">Click "Add Task" or generate an AI plan for this event.</p>
+        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <ListChecks size={40} className="text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+          <h3 className="font-bold text-slate-800 dark:text-white">No Tasks Yet</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Click "Add Task" or generate an AI plan for this event.</p>
           <Link
             href={`/events/${selectedEvent.setup.id}`}
-            className="text-xs font-bold text-indigo-600 hover:underline flex items-center justify-center gap-1"
+            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center justify-center gap-1"
           >
             Go to event details <ArrowRight size={14} />
           </Link>
@@ -138,8 +138,8 @@ export default function TimelinePage() {
                 key={task.id}
                 className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                   task.status === 'completed'
-                    ? 'bg-slate-50 border-slate-200 opacity-75'
-                    : 'bg-white border-slate-200 hover:border-indigo-300 shadow-sm'
+                    ? 'bg-slate-50/70 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 opacity-75'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 shadow-sm'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -156,20 +156,20 @@ export default function TimelinePage() {
                   />
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-slate-500' : 'text-slate-900'}`}>
+                      <h4 className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-slate-500 dark:text-slate-400' : 'text-slate-900 dark:text-white'}`}>
                         {task.title}
                       </h4>
                       <span className={`badge badge-${task.priority}`}>
                         {task.priority}
                       </span>
-                      <span className="text-[11px] font-medium text-slate-500 px-2 py-0.5 bg-slate-100 rounded">
+                      <span className="text-[11px] font-medium text-slate-500 dark:text-slate-300 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">
                         {task.category}
                       </span>
                     </div>
                     {task.description && (
-                      <p className="text-xs text-slate-500 mt-1">{task.description}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{task.description}</p>
                     )}
-                    <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center gap-1">
                       <Clock size={12} /> Due: {task.dueDate}
                       {isTaskPast && task.status !== 'completed' && (
                         <span className="text-red-500 font-bold ml-1">(Past Due)</span>
@@ -185,7 +185,7 @@ export default function TimelinePage() {
                       updateTask(selectedEvent.setup.id, task.id, { status: e.target.value as TaskStatus });
                       refresh();
                     }}
-                    className="text-xs border border-slate-200 rounded-lg px-2 py-1 text-slate-700 bg-white"
+                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800"
                   >
                     <option value="pending">Pending</option>
                     <option value="in-progress">In Progress</option>
@@ -209,46 +209,46 @@ export default function TimelinePage() {
 
       {/* Task Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Add Preparation Task</h3>
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Add Preparation Task</h3>
             <form onSubmit={handleCreateTask} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">Task Title *</label>
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Task Title *</label>
                 <input
                   type="text"
                   required
                   value={newTask.title}
                   onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                   placeholder="e.g. Confirm DJ audio rider"
-                  className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">Description</label>
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Description</label>
                 <textarea
                   value={newTask.description}
                   onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Due Date</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Due Date</label>
                   <input
                     type="date"
                     value={newTask.dueDate}
                     onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Priority</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Priority</label>
                   <select
                     value={newTask.priority}
                     onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as TaskPriority })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   >
                     <option value="high">High</option>
                     <option value="medium">Medium</option>
@@ -260,7 +260,7 @@ export default function TimelinePage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                  className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </button>

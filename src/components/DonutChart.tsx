@@ -62,7 +62,7 @@ export default function DonutChart({ segments, total, currency, size = 220 }: Do
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total</span>
           <span className="text-lg font-bold text-slate-900 dark:text-white">
-            {currency} {total >= 1000 ? `${(total / 1000).toFixed(1)}k` : total}
+            {currency === 'INR' ? '₹' : currency} {total >= 1000 ? `${(total / 1000).toFixed(1)}k` : total}
           </span>
         </div>
       </div>

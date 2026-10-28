@@ -67,10 +67,10 @@ export default function VendorsPage() {
 
   if (!selectedEvent) {
     return (
-      <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-        <Users2 size={48} className="text-slate-300 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-slate-900">No Events Found</h2>
-        <p className="text-slate-500 text-sm mt-1 mb-6">Create an event to start tracking vendors and contacts.</p>
+      <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <Users2 size={48} className="text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">No Events Found</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-6">Create an event to start tracking vendors and contacts.</p>
         <Link href="/create" className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold">
           Create Event
         </Link>
@@ -85,8 +85,8 @@ export default function VendorsPage() {
     <div className="space-y-8 animate-fade-in pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Vendor Checklist</h1>
-          <p className="text-slate-500 mt-1">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Vendor Checklist</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">
             Organize service providers, status, and quotes. No fictional businesses are fabricated.
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function VendorsPage() {
             <select
               value={selectedEventId}
               onChange={(e) => setSelectedEventId(e.target.value)}
-              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 outline-none focus:border-indigo-500"
+              className="px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-indigo-500"
             >
               {events.map(ev => (
                 <option key={ev.setup.id} value={ev.setup.id}>{ev.setup.eventName}</option>
@@ -114,24 +114,24 @@ export default function VendorsPage() {
       </div>
 
       {/* Summary card */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-4">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between flex-wrap gap-4">
         <div>
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status Summary</span>
-          <h3 className="text-lg font-bold text-slate-900">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
             {bookedCount} of {vendors.length} vendors booked / confirmed
           </h3>
         </div>
-        <div className="text-sm text-slate-500">
-          Total Vendor Quotes: <span className="font-bold text-slate-800">{formatCurrency(vendors.reduce((s, v) => s + v.estimatedCost, 0), selectedEvent.setup.currency)}</span>
+        <div className="text-sm text-slate-500 dark:text-slate-400">
+          Total Vendor Quotes: <span className="font-bold text-slate-800 dark:text-white">{formatCurrency(vendors.reduce((s, v) => s + v.estimatedCost, 0), selectedEvent.setup.currency)}</span>
         </div>
       </div>
 
       {/* Vendor Cards */}
       {vendors.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <Users2 size={40} className="text-slate-300 mx-auto mb-2" />
-          <h3 className="font-bold text-slate-800">No Vendors Listed</h3>
-          <p className="text-xs text-slate-500 mt-1 mb-4">Add your caterer, florist, venue coordinator, or sound engineer.</p>
+        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <Users2 size={40} className="text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+          <h3 className="font-bold text-slate-800 dark:text-white">No Vendors Listed</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Add your caterer, florist, venue coordinator, or sound engineer.</p>
           <button
             onClick={() => setShowModal(true)}
             className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold shadow"
@@ -142,14 +142,14 @@ export default function VendorsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {vendors.map(vendor => (
-            <div key={vendor.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
+            <div key={vendor.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between">
               <div>
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider block">
+                    <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
                       {vendor.serviceCategory}
                     </span>
-                    <h4 className="font-bold text-slate-900 text-base">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-base">
                       {vendor.name || '(Vendor name not set)'}
                     </h4>
                   </div>
@@ -158,26 +158,26 @@ export default function VendorsPage() {
                   </span>
                 </div>
 
-                <div className="text-xs text-slate-600 space-y-1 mt-3">
-                  <p><span className="font-semibold">Est. Cost:</span> {formatCurrency(vendor.estimatedCost, selectedEvent.setup.currency)}</p>
-                  {vendor.phone && <p><span className="font-semibold">Phone:</span> {vendor.phone}</p>}
-                  {vendor.email && <p><span className="font-semibold">Email:</span> {vendor.email}</p>}
+                <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1 mt-3">
+                  <p><span className="font-semibold text-slate-700 dark:text-slate-200">Est. Cost:</span> {formatCurrency(vendor.estimatedCost, selectedEvent.setup.currency)}</p>
+                  {vendor.phone && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Phone:</span> {vendor.phone}</p>}
+                  {vendor.email && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Email:</span> {vendor.email}</p>}
                   {vendor.contactNotes && (
-                    <p className="bg-slate-50 p-2 rounded-lg text-slate-600 italic mt-2">
+                    <p className="bg-slate-50 dark:bg-slate-800/80 p-2 rounded-lg text-slate-600 dark:text-slate-300 italic mt-2">
                       "{vendor.contactNotes}"
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+              <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-3">
                 <select
                   value={vendor.bookingStatus}
                   onChange={(e) => {
                     updateVendor(selectedEvent.setup.id, vendor.id, { bookingStatus: e.target.value as BookingStatus });
                     refresh();
                   }}
-                  className="text-xs border border-slate-200 rounded-lg px-2 py-1 text-slate-700 bg-white"
+                  className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800"
                 >
                   <option value="contacted">Contacted</option>
                   <option value="quoted">Quoted</option>
@@ -203,27 +203,27 @@ export default function VendorsPage() {
 
       {/* Vendor Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Add Vendor</h3>
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Add Vendor</h3>
             <form onSubmit={handleCreateVendor} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">Vendor/Business Name</label>
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Vendor/Business Name</label>
                 <input
                   type="text"
                   value={newVendor.name}
                   onChange={(e) => setNewVendor({ ...newVendor, name: e.target.value })}
                   placeholder="e.g. Acme Sound & Lighting"
-                  className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Category *</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Category *</label>
                   <select
                     value={newVendor.serviceCategory}
                     onChange={(e) => setNewVendor({ ...newVendor, serviceCategory: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   >
                     <option value="Venue">Venue</option>
                     <option value="Catering">Catering</option>
@@ -236,11 +236,11 @@ export default function VendorsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Status</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Status</label>
                   <select
                     value={newVendor.bookingStatus}
                     onChange={(e) => setNewVendor({ ...newVendor, bookingStatus: e.target.value as BookingStatus })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   >
                     <option value="contacted">Contacted</option>
                     <option value="quoted">Quoted</option>
@@ -251,48 +251,48 @@ export default function VendorsPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">Estimated Cost ({selectedEvent.setup.currency})</label>
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Estimated Cost ({selectedEvent.setup.currency})</label>
                 <input
                   type="number"
                   value={newVendor.estimatedCost}
                   onChange={(e) => setNewVendor({ ...newVendor, estimatedCost: parseFloat(e.target.value) || 0 })}
-                  className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Phone</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Phone</label>
                   <input
                     type="text"
                     value={newVendor.phone}
                     onChange={(e) => setNewVendor({ ...newVendor, phone: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Email</label>
+                  <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Email</label>
                   <input
                     type="email"
                     value={newVendor.email}
                     onChange={(e) => setNewVendor({ ...newVendor, email: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">Notes</label>
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Notes</label>
                 <textarea
                   value={newVendor.contactNotes}
                   onChange={(e) => setNewVendor({ ...newVendor, contactNotes: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl text-sm outline-none focus:border-indigo-500 resize-none"
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                  className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </button>

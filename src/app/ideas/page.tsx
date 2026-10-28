@@ -60,8 +60,8 @@ const SHOWCASE_INSPIRATIONS = [
 
 export default function IdeasPage() {
   const [eventType, setEventType] = useState('wedding');
-  const [budget, setBudget] = useState(25000);
-  const [currency, setCurrency] = useState('USD');
+  const [budget, setBudget] = useState(50000);
+  const [currency, setCurrency] = useState('INR');
   const [guestCount, setGuestCount] = useState(80);
   const [preferences, setPreferences] = useState('Nature inspired, cozy atmosphere, twilight vibes');
 
@@ -178,10 +178,10 @@ export default function IdeasPage() {
               onChange={(e) => setCurrency(e.target.value)}
               className="form-input"
             >
+              <option value="INR">INR (₹)</option>
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
               <option value="GBP">GBP (£)</option>
-              <option value="INR">INR (₹)</option>
               <option value="CAD">CAD ($)</option>
               <option value="AUD">AUD ($)</option>
             </select>

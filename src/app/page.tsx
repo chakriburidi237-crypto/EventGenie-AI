@@ -269,7 +269,7 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white text-base">Sarah & James — Enchanted Garden Wedding</h3>
               <p className="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">
-                &ldquo;EventGenie AI turned our wedding planning into a peaceful, joyful breeze! The AI budget optimizer flagged $7,450 in redundant allocations that we redirected to our dream photographer.&rdquo;
+                &ldquo;EventGenie AI turned our wedding planning into a peaceful, joyful breeze! The AI budget optimizer flagged ₹7,450 in redundant allocations that we redirected to our dream photographer.&rdquo;
               </p>
             </div>
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs">
