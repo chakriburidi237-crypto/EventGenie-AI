@@ -139,13 +139,13 @@ export default function BudgetOverviewPage() {
         <div className={`p-5 rounded-2xl border shadow-sm ${
           over
             ? 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900/50'
-            : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/50'
+            : 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800'
         }`}>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Remaining</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Remaining</span>
           <p className={`text-2xl font-bold mt-1 ${over ? 'text-red-600 dark:text-red-400' : 'text-emerald-700 dark:text-emerald-300'}`}>
             {formatCurrency(remaining, budget.currency)}
           </p>
-          <span className={`text-xs font-semibold block mt-1 ${over ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+          <span className={`text-xs font-bold block mt-1 ${over ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-300'}`}>
             {over ? 'Over budget by ' + formatCurrency(totalEstimated - budget.totalBudget, budget.currency) : 'Within budget target'}
           </span>
         </div>

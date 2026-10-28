@@ -1,6 +1,15 @@
 // ─── Core Types for EventGenie AI ───
 
-export type EventType = 'wedding' | 'birthday' | 'community' | 'corporate' | 'other';
+export type EventType =
+  | 'wedding'
+  | 'birthday'
+  | 'anniversary'
+  | 'baby-shower'
+  | 'community'
+  | 'corporate'
+  | 'graduation'
+  | 'festival'
+  | 'other';
 export type VenuePreference = 'indoor' | 'outdoor' | 'both';
 export type TaskPriority = 'high' | 'medium' | 'low';
 export type TaskStatus = 'pending' | 'in-progress' | 'completed';

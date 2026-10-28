@@ -2,7 +2,7 @@
 
 import { FullEvent, EventSetup, TimelineTask, Vendor, Guest, BudgetPlan, AIEventPlan } from './types';
 import { createDefaultBudgetPlan } from './budget';
-import { getDemoEvent, generateId } from './demo-data';
+import { getDemoEvent, getInitialDemoEvents, generateId } from './demo-data';
 
 const STORAGE_KEY = 'eventgenie_events';
 
@@ -23,13 +23,13 @@ function saveEvents(events: FullEvent[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 }
 
-// ─── Initialize demo event if no events exist ───
+// ─── Initialize demo event portfolio if needed ───
 
 export function initializeStore(): void {
   const events = getStoredEvents();
-  if (events.length === 0) {
-    const demo = getDemoEvent();
-    saveEvents([demo]);
+  if (events.length === 0 || !events[0].guests || events[0].guests.length === 0) {
+    const portfolio = getInitialDemoEvents();
+    saveEvents(portfolio);
   }
 }
 

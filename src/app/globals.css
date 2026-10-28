@@ -45,6 +45,24 @@
   --radius-xl: 1rem;
 }
 
+.dark {
+  /* Dark Surfaces */
+  --color-bg: #090d16;
+  --color-bg-card: #0f172a;
+  --color-bg-sidebar: #020617;
+  --color-bg-hover: #1e293b;
+
+  /* Dark Text */
+  --color-text: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-sidebar: #f1f5f9;
+
+  /* Dark Borders */
+  --color-border: #1e293b;
+  --color-border-focus: #818cf8;
+}
+
 /* ─── Base ─── */
 
 * {
@@ -55,12 +73,55 @@ html {
   scroll-behavior: smooth;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html.dark body {
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+}
+
+/* ─── Universal Form Controls ─── */
+.form-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.dark .form-input,
+html.dark .form-input {
+  border-color: #334155;
+  color: #f8fafc;
+  background: #0f172a;
+}
+
+.form-input:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+}
+
+.dark .form-input::placeholder,
+html.dark .form-input::placeholder {
+  color: #64748b;
 }
 
 /* ─── Custom Scrollbar ─── */
@@ -182,6 +243,13 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.dark .demo-banner,
+html.dark .demo-banner {
+  background: rgba(120, 53, 15, 0.25);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fde68a;
 }
 
 @keyframes toastIn {

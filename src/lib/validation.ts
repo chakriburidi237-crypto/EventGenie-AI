@@ -1,9 +1,21 @@
 import { EventSetup, ValidationError } from './types';
 
+export const VALID_EVENT_TYPES = [
+  'wedding',
+  'birthday',
+  'anniversary',
+  'baby-shower',
+  'community',
+  'corporate',
+  'graduation',
+  'festival',
+  'other',
+];
+
 export function validateEventSetup(data: Partial<EventSetup>): ValidationError[] {
   const errors: ValidationError[] = [];
 
-  if (!data.eventType || !['wedding', 'birthday', 'community', 'corporate', 'other'].includes(data.eventType)) {
+  if (!data.eventType || !VALID_EVENT_TYPES.includes(data.eventType)) {
     errors.push({ field: 'eventType', message: 'Please select an event type.' });
   }
 
