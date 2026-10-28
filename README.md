@@ -8,6 +8,33 @@ EventGenie AI is a full-stack, AI-powered event planning web application built f
 
 ---
 
+## 🎥 Project Demo Video
+
+A walkthrough demonstration is bundled directly in the repository:
+- **MP4 Video File**: [`demo_video.mp4`](./demo_video.mp4) or via public path [`public/demo_video.mp4`](./public/demo_video.mp4)
+- *Ready for submission on YouTube / Google Drive or direct playback.*
+
+---
+
+## 📸 Application Screenshots & UI Showcase
+
+### 1. Smart Budget Planner & Interactive SVG Donut Chart
+![Smart Budget Planner](./public/screenshots/smart-budget-planner.png)
+
+### 2. Vendor Checklist & Quote Management
+![Vendor Checklist](./public/screenshots/vendor-checklist.png)
+
+### 3. Events Portfolio & Status Dashboard
+![My Events Dashboard](./public/screenshots/my-events-dashboard.png)
+
+### 4. Guest List & RSVP Dietary Manager
+![Guest List & RSVP Manager](./public/screenshots/guest-rsvp-manager.png)
+
+### 5. AI Blueprint Hub & Recommendations
+![Event Details Overview](./public/screenshots/event-details-overview.png)
+
+---
+
 ## 🚀 Key Features
 
 1. **Event Setup & Validation**: Comprehensive configuration including event type, guest count, budget, currency, venue preference (indoor/outdoor/both), and dietary/special requirements. Complete client-side and server-side validation.
