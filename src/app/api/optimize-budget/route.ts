@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = request.headers.get('x-gemini-api-key') || (body as Record<string, any>).apiKey;
+    const apiKey = request.headers.get('x-gemini-api-key') || (body as Record<string, unknown>).apiKey as string | undefined;
     const optimization = await optimizeBudget(setup, currentBudget, priorities || [], apiKey);
 
     return NextResponse.json({ success: true, data: optimization });

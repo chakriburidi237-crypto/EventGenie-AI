@@ -1,5 +1,4 @@
-import { FullEvent, AIEventPlan, BudgetCategory, Guest, Vendor, TimelineTask } from './types';
-import { getDefaultBudgetCategories } from './budget';
+import { FullEvent, AIEventPlan, BudgetCategory, Guest } from './types';
 
 /**
  * Generate a unique ID.

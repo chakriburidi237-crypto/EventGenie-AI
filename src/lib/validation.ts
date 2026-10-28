@@ -23,8 +23,8 @@ export function validateEventSetup(data: Partial<EventSetup>): ValidationError[]
     errors.push({ field: 'eventName', message: 'Event name must be at least 2 characters.' });
   }
 
-  if (!data.eventDate) {
-    errors.push({ field: 'eventDate', message: 'Please select an event date.' });
+  if (!data.eventDate || isNaN(new Date(data.eventDate).getTime())) {
+    errors.push({ field: 'eventDate', message: 'Please select a valid event date.' });
   }
 
   if (!data.location || data.location.trim().length < 2) {
@@ -43,8 +43,13 @@ export function validateEventSetup(data: Partial<EventSetup>): ValidationError[]
     errors.push({ field: 'totalBudget', message: 'Budget must be greater than 0.' });
   }
 
-  if (!data.currency || data.currency.trim().length === 0) {
-    errors.push({ field: 'currency', message: 'Please select a currency.' });
+  if (data.totalBudget && data.totalBudget > 1000000000) {
+    errors.push({ field: 'totalBudget', message: 'Budget exceeds maximum permitted threshold.' });
+  }
+
+  const VALID_CURRENCIES = ['USD', 'INR', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'SGD', 'AED'];
+  if (!data.currency || !VALID_CURRENCIES.includes(data.currency.toUpperCase())) {
+    errors.push({ field: 'currency', message: 'Please select a supported currency.' });
   }
 
   if (!data.venuePreference || !['indoor', 'outdoor', 'both'].includes(data.venuePreference)) {

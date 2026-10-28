@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users2, Plus, Trash2, ArrowRight } from 'lucide-react';
+import { Users2, Plus, Trash2 } from 'lucide-react';
 import { FullEvent, BookingStatus } from '@/lib/types';
 import { getAllEvents, addVendor, updateVendor, deleteVendor, initializeStore } from '@/lib/store';
 import { formatCurrency } from '@/lib/budget';
@@ -164,7 +164,7 @@ export default function VendorsPage() {
                   {vendor.email && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Email:</span> {vendor.email}</p>}
                   {vendor.contactNotes && (
                     <p className="bg-slate-50 dark:bg-slate-800/80 p-2 rounded-lg text-slate-600 dark:text-slate-300 italic mt-2">
-                      "{vendor.contactNotes}"
+                      &quot;{vendor.contactNotes}&quot;
                     </p>
                   )}
                 </div>

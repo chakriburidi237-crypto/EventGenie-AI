@@ -17,7 +17,26 @@ export default function DonutChart({ segments, total, currency, size = 220 }: Do
   const activeSegments = segments.filter(s => s.value > 0);
   const totalValue = activeSegments.reduce((s, seg) => s + seg.value, 0);
 
-  let cumulativePercent = 0;
+  // Pre-calculate segment offsets with pure reduce (zero mutations)
+  const segmentsWithOffsets = activeSegments.reduce<{
+    list: (typeof activeSegments[number] & { dashArray: string; dashOffset: number })[];
+    cumulative: number;
+  }>((acc, seg) => {
+    const percent = totalValue > 0 ? seg.value / totalValue : 0;
+    const dashArray = `${circumference * percent} ${circumference * (1 - percent)}`;
+    const dashOffset = -circumference * acc.cumulative;
+    return {
+      list: [
+        ...acc.list,
+        {
+          ...seg,
+          dashArray,
+          dashOffset,
+        },
+      ],
+      cumulative: acc.cumulative + percent,
+    };
+  }, { list: [], cumulative: 0 }).list;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -34,12 +53,7 @@ export default function DonutChart({ segments, total, currency, size = 220 }: Do
             className="text-slate-100 dark:text-slate-800"
           />
           {/* Segments */}
-          {activeSegments.map((seg, i) => {
-            const percent = totalValue > 0 ? seg.value / totalValue : 0;
-            const dashArray = `${circumference * percent} ${circumference * (1 - percent)}`;
-            const dashOffset = -circumference * cumulativePercent;
-            cumulativePercent += percent;
-
+          {segmentsWithOffsets.map((seg, i) => {
             return (
               <circle
                 key={i}
@@ -49,8 +63,8 @@ export default function DonutChart({ segments, total, currency, size = 220 }: Do
                 fill="none"
                 stroke={seg.color}
                 strokeWidth={strokeWidth}
-                strokeDasharray={dashArray}
-                strokeDashoffset={dashOffset}
+                strokeDasharray={seg.dashArray}
+                strokeDashoffset={seg.dashOffset}
                 strokeLinecap="round"
                 className="transition-all duration-700 ease-out"
                 style={{ animationDelay: `${i * 100}ms` }}

@@ -6,24 +6,20 @@ import {
   CalendarDays,
   Wallet,
   ListChecks,
-  Users,
   Sparkles,
   PlusCircle,
   ArrowRight,
-  TrendingUp,
   Clock,
   CheckCircle2,
   AlertCircle,
   UserCheck,
-  Bot,
-  Flame,
   ShieldCheck,
   Trophy,
   Star,
 } from 'lucide-react';
 import { FullEvent } from '@/lib/types';
 import { getAllEvents, initializeStore } from '@/lib/store';
-import { calculateTotalEstimated, calculateRemainingBudget, formatCurrency } from '@/lib/budget';
+import { calculateRemainingBudget, formatCurrency } from '@/lib/budget';
 
 export default function DashboardPage() {
   const [events, setEvents] = useState<FullEvent[]>([]);
@@ -43,7 +39,6 @@ export default function DashboardPage() {
   const upcomingEvents = events.filter(e => new Date(e.setup.eventDate) >= new Date()).length;
   const totalTasks = events.reduce((s, e) => s + e.tasks.length, 0);
   const completedTasks = events.reduce((s, e) => s + e.tasks.filter(t => t.status === 'completed').length, 0);
-  const totalVendors = events.reduce((s, e) => s + e.vendors.length, 0);
   const totalGuests = events.reduce((s, e) => s + (e.guests?.length || 0), 0);
   const confirmedGuests = events.reduce((s, e) => {
     return s + (e.guests?.filter(g => g.rsvpStatus === 'confirmed' || g.rsvpStatus === 'attending').length || 0);
@@ -393,7 +388,6 @@ function FeaturePillarCard({ href, icon, title, description, badge }: {
 function EventPreviewCard({ event }: { event: FullEvent }) {
   const { setup, tasks, budget } = event;
   const isPast = new Date(setup.eventDate) < new Date();
-  const totalEstimated = calculateTotalEstimated(budget.categories);
   const remaining = calculateRemainingBudget(budget.totalBudget, budget.categories);
   const completedTasks = tasks.filter(t => t.status === 'completed').length;
   const taskPct = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;

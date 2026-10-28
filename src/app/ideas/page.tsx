@@ -7,17 +7,10 @@ import {
   Loader2,
   AlertCircle,
   Star,
-  Quote,
   ShieldCheck,
   Check,
-  MapPin,
-  CalendarDays,
-  Users,
-  Wallet,
-  ArrowRight,
 } from 'lucide-react';
 import { AIThemeIdea } from '@/lib/types';
-import { CUSTOMER_TESTIMONIALS } from '@/lib/demo-data';
 
 // Quick reference style suggestions
 const STYLE_KEYWORD_PRESETS = [

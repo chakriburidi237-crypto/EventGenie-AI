@@ -2,7 +2,7 @@
 
 import { FullEvent, EventSetup, TimelineTask, Vendor, Guest, BudgetPlan, AIEventPlan } from './types';
 import { createDefaultBudgetPlan } from './budget';
-import { getDemoEvent, getInitialDemoEvents, generateId } from './demo-data';
+import { getInitialDemoEvents, generateId } from './demo-data';
 
 const STORAGE_KEY = 'eventgenie_events';
 

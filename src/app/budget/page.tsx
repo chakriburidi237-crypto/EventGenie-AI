@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Wallet, AlertCircle, ArrowRight, TrendingUp, Sparkles, TrendingDown, PieChart, Check } from 'lucide-react';
+import { Wallet, AlertCircle, ArrowRight, PieChart } from 'lucide-react';
 import { FullEvent } from '@/lib/types';
 import { getAllEvents, updateEvent, initializeStore } from '@/lib/store';
 import { calculateTotalEstimated, calculateTotalActual, calculateRemainingBudget, isOverBudget, formatCurrency } from '@/lib/budget';
 import DonutChart from '@/components/DonutChart';
-import { useToast } from '@/components/Toast';
 
 const CATEGORY_COLORS = [
   '#6366f1', // Indigo
@@ -21,7 +20,6 @@ const CATEGORY_COLORS = [
 ];
 
 export default function BudgetOverviewPage() {
-  const { addToast } = useToast();
   const [events, setEvents] = useState<FullEvent[]>([]);
   const [selectedEventId, setSelectedEventId] = useState<string>('');
   const [loaded, setLoaded] = useState(false);
@@ -60,7 +58,7 @@ export default function BudgetOverviewPage() {
     );
   }
 
-  const { setup, budget } = selectedEvent;
+  const { budget } = selectedEvent;
   const totalEstimated = calculateTotalEstimated(budget.categories);
   const totalActual = calculateTotalActual(budget.categories);
   const remaining = calculateRemainingBudget(budget.totalBudget, budget.categories);
@@ -186,7 +184,6 @@ export default function BudgetOverviewPage() {
             {budget.categories.map((cat, idx) => {
               const color = CATEGORY_COLORS[idx % CATEGORY_COLORS.length];
               const pct = totalEstimated > 0 ? Math.round((cat.estimated / totalEstimated) * 100) : 0;
-              const actualPct = cat.estimated > 0 ? Math.min(Math.round((cat.actual / cat.estimated) * 100), 100) : 0;
 
               return (
                 <div key={cat.id} className="space-y-1">

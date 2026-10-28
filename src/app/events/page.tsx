@@ -13,8 +13,6 @@ import {
   Clock,
   AlertTriangle,
   Search,
-  Filter,
-  CheckCircle2,
   Sparkles,
 } from 'lucide-react';
 import { FullEvent, EventType } from '@/lib/types';
@@ -32,10 +30,12 @@ export default function EventsPage() {
 
   // Delete modal state
   const [eventToDelete, setEventToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [currentTimestamp, setCurrentTimestamp] = useState<number>(0);
 
   useEffect(() => {
     initializeStore();
     setEvents(getAllEvents());
+    setCurrentTimestamp(Date.now());
     setLoaded(true);
   }, []);
 
@@ -128,7 +128,7 @@ export default function EventsPage() {
             {/* Type selector */}
             <select
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as any)}
+              onChange={(e) => setTypeFilter(e.target.value as 'all' | EventType)}
               className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 outline-none"
             >
               <option value="all">All Event Types</option>
@@ -163,8 +163,9 @@ export default function EventsPage() {
         <div className="space-y-4">
           {filteredEvents.map(event => {
             const { setup } = event;
-            const isPast = new Date(setup.eventDate) < new Date();
-            const daysUntil = Math.ceil((new Date(setup.eventDate).getTime() - Date.now()) / 86400000);
+            const eventTime = new Date(setup.eventDate).getTime();
+            const daysUntil = Math.ceil((eventTime - currentTimestamp) / 86400000);
+            const isPast = daysUntil < 0;
             const totalTasks = event.tasks.length;
             const completedTasks = event.tasks.filter(t => t.status === 'completed').length;
             const taskProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
@@ -273,7 +274,7 @@ export default function EventsPage() {
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Confirm Deletion</h3>
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Are you sure you want to delete <span className="font-bold text-slate-900 dark:text-white">"{eventToDelete.name}"</span>?
+              Are you sure you want to delete <span className="font-bold text-slate-900 dark:text-white">&quot;{eventToDelete.name}&quot;</span>?
               All associated budget plans, tasks, vendors, and guest records will be permanently removed.
             </p>
             <div className="flex items-center justify-end gap-3 pt-2">

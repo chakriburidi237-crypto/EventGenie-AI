@@ -6,17 +6,11 @@ import {
   Users,
   UserPlus,
   Search,
-  Filter,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  Sparkles,
   Utensils,
   Download,
   Trash2,
   Edit2,
   AlertCircle,
-  ArrowRight,
   UserCheck,
 } from 'lucide-react';
 import { FullEvent, Guest, RSVPStatus } from '@/lib/types';

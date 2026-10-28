@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ListChecks, Plus, Trash2, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ListChecks, Plus, Trash2, Clock, ArrowRight } from 'lucide-react';
 import { FullEvent, TaskPriority, TaskStatus } from '@/lib/types';
 import { getAllEvents, addTask, updateTask, deleteTask, initializeStore } from '@/lib/store';
 
@@ -121,7 +121,7 @@ export default function TimelinePage() {
         <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
           <ListChecks size={40} className="text-slate-300 dark:text-slate-600 mx-auto mb-2" />
           <h3 className="font-bold text-slate-800 dark:text-white">No Tasks Yet</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Click "Add Task" or generate an AI plan for this event.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Click &quot;Add Task&quot; or generate an AI plan for this event.</p>
           <Link
             href={`/events/${selectedEvent.setup.id}`}
             className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center justify-center gap-1"

@@ -316,9 +316,6 @@ function generateSampleOptimization(
   currentBudget: { category: string; amount: number }[],
   priorities: string[]
 ): AIBudgetOptimization {
-  const totalAllocated = currentBudget.reduce((s, c) => s + c.amount, 0);
-  const excess = totalAllocated - setup.totalBudget;
-
   const adjustments = currentBudget.map(item => {
     const isPriority = priorities.some(p => item.category.toLowerCase().includes(p.toLowerCase()));
     let cutPercent = 0;
@@ -331,7 +328,6 @@ function generateSampleOptimization(
     else if (!isPriority) cutPercent = 0.10;
 
     const proposed = Math.max(0, Math.round(item.amount * (1 - cutPercent)));
-    const saved = item.amount - proposed;
 
     return {
       category: item.category,
@@ -358,12 +354,13 @@ function generateSampleThemes(
   budget: number,
   currency: string,
   guestCount: number,
-  preferences: string
+  preferences?: string
 ): AIThemeIdea[] {
+  const customNote = preferences && preferences.trim() ? ` featuring ${preferences.trim()}` : '';
   return [
     {
       title: `${eventType === 'wedding' ? 'Enchanted Garden Glasshouse' : 'Botanical Twilight Oasis'}`,
-      description: `An organic aesthetic combining lush foliage, warm hanging lanterns, and wooden accents, thoughtfully tailored for ${guestCount} attendees.`,
+      description: `An organic aesthetic combining lush foliage, warm hanging lanterns, and wooden accents${customNote}, thoughtfully tailored for ${guestCount} attendees.`,
       estimatedBudgetRange: `${currency} ${Math.round(budget * 0.85).toLocaleString()} – ${currency} ${Math.round(budget).toLocaleString()} (estimated)`,
       keyElements: ['Terrarium & eucalyptus centerpieces', 'Fairy light canopy', 'Locally sourced farm-to-table cuisine', 'Acoustic live duo'],
       suitableFor: [eventType, 'Celebration', 'Evening Gathering'],

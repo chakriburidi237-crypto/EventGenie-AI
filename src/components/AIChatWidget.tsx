@@ -9,23 +9,18 @@ interface ChatMessage {
   timestamp?: string;
 }
 
+const INITIAL_MESSAGE: ChatMessage = {
+  role: 'assistant',
+  content: "Hi! I'm EventGenie AI 🎉 Ask me anything about event planning — budgets, themes, timelines, vendor tips, or creative ideas!",
+};
+
 export default function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setMessages([
-      {
-        role: 'assistant',
-        content: "Hi! I'm EventGenie AI 🎉 Ask me anything about event planning — budgets, themes, timelines, vendor tips, or creative ideas!",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      },
-    ]);
-  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

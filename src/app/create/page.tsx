@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import {
   CalendarDays,
   MapPin,
@@ -19,14 +18,11 @@ import {
   Quote,
   ShieldCheck,
   Check,
-  Clock,
-  ArrowRight,
 } from 'lucide-react';
 import { EventSetup, EventType, VenuePreference, ValidationError } from '@/lib/types';
 import { validateEventSetup } from '@/lib/validation';
 import { createEvent, updateEvent, saveEventPlan } from '@/lib/store';
 import { applyAIBudgetAllocations } from '@/lib/budget';
-import { CUSTOMER_TESTIMONIALS } from '@/lib/demo-data';
 
 const eventTypes: { value: EventType; label: string; emoji: string }[] = [
   { value: 'wedding', label: 'Wedding', emoji: '💍' },

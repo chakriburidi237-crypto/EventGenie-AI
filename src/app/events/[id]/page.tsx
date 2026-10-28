@@ -2,11 +2,9 @@
 
 import { Suspense, use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
   CalendarDays,
   MapPin,
-  Users,
   Wallet,
   Sparkles,
   ListChecks,
@@ -15,16 +13,14 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
-  CheckCircle2,
   Clock,
   Plus,
   Trash2,
   TrendingDown,
-  Edit3,
   Printer,
   UserCheck,
 } from 'lucide-react';
-import { FullEvent, AIEventPlan, TimelineTask, Vendor, TaskPriority, TaskStatus, BookingStatus } from '@/lib/types';
+import { FullEvent, TaskPriority, TaskStatus, BookingStatus } from '@/lib/types';
 import { getEventById, updateEvent, saveEventPlan, addTask, updateTask, deleteTask, addVendor, updateVendor, deleteVendor, exportEventToText, initializeStore } from '@/lib/store';
 import { calculateTotalEstimated, calculateTotalActual, calculateRemainingBudget, isOverBudget, formatCurrency, applyAIBudgetAllocations } from '@/lib/budget';
 import { useToast } from '@/components/Toast';
@@ -39,7 +35,6 @@ export default function EventDetailPage(props: { params: Promise<{ id: string }>
 
 function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
-  const router = useRouter();
   const { addToast } = useToast();
   const [event, setEvent] = useState<FullEvent | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -334,7 +329,7 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
           return (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'plan' | 'budget' | 'timeline' | 'vendors' | 'optimize')}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl transition-all whitespace-nowrap ${
                 active
                   ? 'border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50'
@@ -714,7 +709,7 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
                     {vendor.email && <p><span className="font-semibold text-slate-700 dark:text-slate-200">Email:</span> {vendor.email}</p>}
                     {vendor.contactNotes && (
                       <p className="bg-slate-50 dark:bg-slate-800/80 p-2 rounded-lg text-slate-600 dark:text-slate-300 italic mt-2">
-                        "{vendor.contactNotes}"
+                        &quot;{vendor.contactNotes}&quot;
                       </p>
                     )}
                   </div>
