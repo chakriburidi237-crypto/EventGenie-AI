@@ -19,6 +19,10 @@ import {
   TrendingDown,
   Printer,
   UserCheck,
+  Mail,
+  QrCode,
+  Share2,
+  Check,
 } from 'lucide-react';
 import { FullEvent, TaskPriority, TaskStatus, BookingStatus } from '@/lib/types';
 import { getEventById, updateEvent, saveEventPlan, addTask, updateTask, deleteTask, addVendor, updateVendor, deleteVendor, exportEventToText, initializeStore } from '@/lib/store';
@@ -38,11 +42,30 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
   const { addToast } = useToast();
   const [event, setEvent] = useState<FullEvent | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [activeTab, setActiveTab] = useState<'plan' | 'budget' | 'timeline' | 'vendors' | 'optimize'>('plan');
+  const [activeTab, setActiveTab] = useState<'plan' | 'budget' | 'timeline' | 'itinerary' | 'invitation' | 'vendors' | 'optimize'>('plan');
+  const [copiedLink, setCopiedLink] = useState(false);
   
-  function handlePrint() {
-    window.print();
-  }
+  // Day-of Itinerary / Run of Show state
+  const [itinerary, setItinerary] = useState<Array<{
+    id: string;
+    time: string;
+    title: string;
+    location: string;
+    notes: string;
+    completed: boolean;
+  }>>([
+    { id: '1', time: '09:00 AM', title: 'Vendor Arrival & Staging', location: 'Main Venue / Loading Bay', notes: 'Caterer, florist, and sound engineer load in and sound check', completed: true },
+    { id: '2', time: '11:00 AM', title: 'Decor & Floral Final Touches', location: 'Ballroom & Reception', notes: 'Centerpieces, seating placement, and ambient lighting check', completed: true },
+    { id: '12:30 PM', time: '12:30 PM', title: 'Guest Arrival & Welcome Cocktails', location: 'Foyer / Garden Lawn', notes: 'Welcome drinks served, signature guestbook signing', completed: false },
+    { id: '4', time: '01:45 PM', title: 'Grand Entrance & Opening Moments', location: 'Main Hall', notes: 'Host welcome speech and ceremonial kick-off', completed: false },
+    { id: '5', time: '02:30 PM', title: 'Celebration Banquet Feast', location: 'Dining Area', notes: 'Multi-course dining with customized dietary stations', completed: false },
+    { id: '6', time: '04:30 PM', title: 'Toasts, Tributes & Highlights', location: 'Center Stage', notes: 'Family and key stakeholder speeches with photo slideshow', completed: false },
+    { id: '7', time: '06:00 PM', title: 'Celebratory Cake Cutting & Dancing', location: 'Dance Floor', notes: 'DJ/Band spotlight set and live entertainment', completed: false },
+    { id: '8', time: '08:00 PM', title: 'Farewell Send-off & Favors', location: 'Main Portico', notes: 'Sparkler send-off and guest souvenir distribution', completed: false },
+  ]);
+  const [newItineraryTime, setNewItineraryTime] = useState('');
+  const [newItineraryTitle, setNewItineraryTitle] = useState('');
+  const [newItineraryLocation, setNewItineraryLocation] = useState('');
   
   // AI Generation states
   const [isGenerating, setIsGenerating] = useState(false);
@@ -91,6 +114,47 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
   function refreshEvent() {
     const updated = getEventById(resolvedParams.id);
     if (updated) setEvent({ ...updated });
+  }
+
+  function handlePrint() {
+    window.print();
+  }
+
+  function handleCopyRsvp() {
+    if (typeof window !== 'undefined') {
+      const url = `${window.location.origin}/guests?event=${resolvedParams.id}`;
+      navigator.clipboard.writeText(url);
+      setCopiedLink(true);
+      addToast('RSVP invitation link copied to clipboard!', 'success');
+      setTimeout(() => setCopiedLink(false), 2500);
+    }
+  }
+
+  function handleToggleItinerary(id: string) {
+    setItinerary(prev => prev.map(item => item.id === id ? { ...item, completed: !item.completed } : item));
+  }
+
+  function handleAddItineraryItem(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newItineraryTitle.trim() || !newItineraryTime.trim()) return;
+    const newItem = {
+      id: Date.now().toString(),
+      time: newItineraryTime.trim(),
+      title: newItineraryTitle.trim(),
+      location: newItineraryLocation.trim() || 'Main Venue',
+      notes: '',
+      completed: false,
+    };
+    setItinerary(prev => [...prev, newItem]);
+    setNewItineraryTitle('');
+    setNewItineraryTime('');
+    setNewItineraryLocation('');
+    addToast('Schedule moment added to Day-of Itinerary', 'success');
+  }
+
+  function handleDeleteItineraryItem(id: string) {
+    setItinerary(prev => prev.filter(item => item.id !== id));
+    addToast('Schedule moment removed', 'info');
   }
 
   async function handleGeneratePlan() {
@@ -316,11 +380,13 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
       )}
 
       {/* Tabs */}
-      <div className="flex overflow-x-auto border-b border-slate-200 gap-2 pb-px text-sm font-semibold">
+      <div className="flex overflow-x-auto border-b border-slate-200 dark:border-slate-800 gap-2 pb-px text-sm font-semibold">
         {[
           { key: 'plan', label: 'AI Event Plan', icon: Sparkles },
           { key: 'budget', label: 'Budget Planner', icon: Wallet },
           { key: 'timeline', label: `Tasks & Timeline (${tasks.length})`, icon: ListChecks },
+          { key: 'itinerary', label: `Day-of Schedule (${itinerary.length})`, icon: Clock },
+          { key: 'invitation', label: 'Celebration Invitation & RSVP', icon: Mail },
           { key: 'vendors', label: `Vendors (${vendors.length})`, icon: Users2 },
           { key: 'optimize', label: 'Budget Optimizer', icon: TrendingDown },
         ].map(tab => {
@@ -329,14 +395,14 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
           return (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as 'plan' | 'budget' | 'timeline' | 'vendors' | 'optimize')}
+              onClick={() => setActiveTab(tab.key as 'plan' | 'budget' | 'timeline' | 'itinerary' | 'invitation' | 'vendors' | 'optimize')}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl transition-all whitespace-nowrap ${
                 active
-                  ? 'border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50'
-                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/50'
+                  ? 'border-b-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/40'
+                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
               }`}
             >
-              <Icon size={16} className={active ? 'text-indigo-600' : 'text-slate-400'} />
+              <Icon size={16} className={active ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'} />
               {tab.label}
             </button>
           );
@@ -660,6 +726,249 @@ function EventDetailContent({ params }: { params: Promise<{ id: string }> }) {
               })}
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB: DAY-OF SCHEDULE / RUN OF SHOW */}
+      {activeTab === 'itinerary' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Clock className="text-indigo-600 dark:text-indigo-400" size={20} />
+                Day-of Schedule &amp; Run of Show
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Hourly execution sequence for the day of {setup.eventName}. Print or check off moments in real time.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrint}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition"
+              >
+                <Printer size={15} /> Print Run of Show
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Add Form */}
+          <form onSubmit={handleAddItineraryItem} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-3 items-center">
+            <input
+              type="text"
+              placeholder="Time (e.g. 03:00 PM)"
+              value={newItineraryTime}
+              onChange={(e) => setNewItineraryTime(e.target.value)}
+              className="w-full sm:w-36 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+            />
+            <input
+              type="text"
+              placeholder="Milestone title (e.g. Cake cutting ceremony)"
+              value={newItineraryTitle}
+              onChange={(e) => setNewItineraryTitle(e.target.value)}
+              className="w-full sm:flex-1 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+            />
+            <input
+              type="text"
+              placeholder="Location (e.g. Garden Pavilion)"
+              value={newItineraryLocation}
+              onChange={(e) => setNewItineraryLocation(e.target.value)}
+              className="w-full sm:w-48 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full sm:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1.5 whitespace-nowrap"
+            >
+              <Plus size={15} /> Add Moment
+            </button>
+          </form>
+
+          {/* Timeline Milestones */}
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <span className="text-xs font-extrabold uppercase text-slate-400 tracking-wider">
+                Run of Show Sequence ({itinerary.filter(i => i.completed).length} / {itinerary.length} Completed)
+              </span>
+              <span className="text-xs text-slate-400">
+                Event Date: {setup.eventDate}
+              </span>
+            </div>
+
+            <div className="relative pl-6 border-l-2 border-indigo-200 dark:border-indigo-900/60 space-y-6 my-2">
+              {itinerary.map((item) => (
+                <div key={item.id} className="relative group">
+                  {/* Dot */}
+                  <button
+                    onClick={() => handleToggleItinerary(item.id)}
+                    className={`absolute -left-[31px] top-1.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition ${
+                      item.completed
+                        ? 'bg-emerald-500 border-emerald-600 text-white'
+                        : 'bg-white dark:bg-slate-800 border-indigo-400 text-transparent hover:border-emerald-500'
+                    }`}
+                    title={item.completed ? 'Mark pending' : 'Mark completed'}
+                  >
+                    <Check size={12} className={item.completed ? 'opacity-100' : 'opacity-0'} />
+                  </button>
+
+                  <div className={`p-4 rounded-xl border transition ${
+                    item.completed
+                      ? 'bg-slate-50/60 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 opacity-75'
+                      : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm'
+                  }`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-2.5 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 text-xs font-extrabold font-mono border border-indigo-100 dark:border-indigo-900/40">
+                            {item.time}
+                          </span>
+                          <h4 className={`text-sm font-bold text-slate-900 dark:text-white ${item.completed ? 'line-through text-slate-400' : ''}`}>
+                            {item.title}
+                          </h4>
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1.5">
+                          <span className="flex items-center gap-1">
+                            <MapPin size={13} className="text-slate-400" />
+                            {item.location}
+                          </span>
+                          {item.notes && (
+                            <span className="text-slate-400 italic">· {item.notes}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleDeleteItineraryItem(item.id)}
+                        className="text-slate-300 hover:text-red-500 transition p-1"
+                        title="Remove moment"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB: CELEBRATION INVITATION & RSVP */}
+      {activeTab === 'invitation' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Mail className="text-indigo-600 dark:text-indigo-400" size={20} />
+                Digital Celebration Invitation
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Shareable digital card with direct RSVP tracking and printable keepsake layout.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={handleCopyRsvp}
+                className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition"
+              >
+                {copiedLink ? <Check size={15} /> : <Share2 size={15} />}
+                {copiedLink ? 'Link Copied!' : 'Copy RSVP Link'}
+              </button>
+              <button
+                onClick={handlePrint}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition"
+              >
+                <Printer size={15} /> Print Card
+              </button>
+            </div>
+          </div>
+
+          {/* Invitation Card Render */}
+          <div className="max-w-2xl mx-auto bg-gradient-to-br from-amber-500/10 via-indigo-600/10 to-purple-600/10 p-1 rounded-3xl shadow-2xl border border-amber-300/40 dark:border-amber-600/30">
+            <div className="bg-white dark:bg-slate-900 rounded-[22px] p-8 sm:p-12 text-center relative overflow-hidden border border-slate-100 dark:border-slate-800">
+              {/* Corner Ornaments */}
+              <div className="absolute top-3 left-3 text-amber-500/40 text-xl font-serif">✦</div>
+              <div className="absolute top-3 right-3 text-amber-500/40 text-xl font-serif">✦</div>
+              <div className="absolute bottom-3 left-3 text-amber-500/40 text-xl font-serif">✦</div>
+              <div className="absolute bottom-3 right-3 text-amber-500/40 text-xl font-serif">✦</div>
+
+              {/* Invitation Header */}
+              <span className="inline-block px-3.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-bold tracking-widest uppercase mb-4 border border-amber-200 dark:border-amber-800">
+                {setup.eventType} Celebration
+              </span>
+
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+                {setup.eventName}
+              </h2>
+
+              <p className="text-slate-500 dark:text-slate-400 text-sm italic mb-8 max-w-md mx-auto">
+                &quot;Together with family and cherished friends, we cordially invite you to celebrate this joyous occasion.&quot;
+              </p>
+
+              {/* Event Particulars Box */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 mb-8">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
+                    Date &amp; Time
+                  </span>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <CalendarDays size={15} className="text-indigo-600" />
+                    {setup.eventDate}
+                  </p>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
+                    Location &amp; Venue
+                  </span>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <MapPin size={15} className="text-indigo-600" />
+                    {setup.location}
+                  </p>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
+                    Theme / Atmosphere
+                  </span>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Sparkles size={15} className="text-amber-500" />
+                    {setup.theme || 'Celebratory Elegance'}
+                  </p>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
+                    Venue Setting
+                  </span>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">
+                    {setup.venuePreference || 'Indoor / Outdoor'}
+                  </p>
+                </div>
+              </div>
+
+              {/* RSVP & QR Code Badge */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="text-left">
+                  <span className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
+                    RSVP Confirmation
+                  </span>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Please confirm attendance via our digital portal or scan the QR badge.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                  <div className="w-14 h-14 bg-slate-900 dark:bg-white rounded-lg flex items-center justify-center text-white dark:text-slate-900">
+                    <QrCode size={36} />
+                  </div>
+                  <div className="text-left text-[11px]">
+                    <span className="font-bold text-slate-800 dark:text-slate-200 block">Instant RSVP</span>
+                    <span className="text-slate-400">Scan via camera</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

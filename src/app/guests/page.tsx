@@ -12,6 +12,8 @@ import {
   Edit2,
   AlertCircle,
   UserCheck,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 import { FullEvent, Guest, RSVPStatus } from '@/lib/types';
 import { getAllEvents, addGuest, updateGuest, deleteGuest, initializeStore } from '@/lib/store';
@@ -24,6 +26,7 @@ export default function GuestListPage() {
   const [loaded, setLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | RSVPStatus>('all');
+  const [viewMode, setViewMode] = useState<'list' | 'tables'>('list');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
 
@@ -95,6 +98,17 @@ export default function GuestListPage() {
       return matchesSearch && matchesStatus;
     });
   }, [guests, searchQuery, statusFilter]);
+
+  // Table grouping for Seating Chart view
+  const tableGroups = useMemo(() => {
+    const map: Record<string, Guest[]> = {};
+    filteredGuests.forEach(g => {
+      const table = g.tableNumber?.trim() ? `Table ${g.tableNumber.trim().replace(/^table\s*/i, '')}` : 'Unassigned';
+      if (!map[table]) map[table] = [];
+      map[table].push(g);
+    });
+    return map;
+  }, [filteredGuests]);
 
   if (!loaded) {
     return (
@@ -341,24 +355,51 @@ export default function GuestListPage() {
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-          {(['all', 'confirmed', 'attending', 'invited', 'declined'] as const).map(tab => (
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end flex-wrap">
+          {/* View Mode Toggle */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             <button
-              key={tab}
-              onClick={() => setStatusFilter(tab)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition whitespace-nowrap ${
-                statusFilter === tab
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                viewMode === 'list'
+                  ? 'bg-white dark:bg-slate-750 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
             >
-              {tab}
+              <List size={14} /> List
             </button>
-          ))}
+            <button
+              onClick={() => setViewMode('tables')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                viewMode === 'tables'
+                  ? 'bg-white dark:bg-slate-750 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              }`}
+            >
+              <LayoutGrid size={14} /> Seating Chart
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {(['all', 'confirmed', 'attending', 'invited', 'declined'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setStatusFilter(tab)}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold capitalize transition whitespace-nowrap ${
+                  statusFilter === tab
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Guest Table */}
+      {/* Guest Table (List View) */}
+      {viewMode === 'list' && (
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
@@ -464,6 +505,132 @@ export default function GuestListPage() {
           </table>
         </div>
       </div>
+      )}
+
+      {/* Seating Chart (Tables View) */}
+      {viewMode === 'tables' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                Banquet Table Seating Chart ({Object.keys(tableGroups).length} Table Groups)
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Visual arrangement of banquet tables and seating allocation. Click any guest to modify placement.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Object.entries(tableGroups).map(([tableName, seatedGuests]) => {
+              const tableCapacity = 8;
+              const count = seatedGuests.reduce((acc, g) => acc + 1 + (g.plusOnes || 0), 0);
+              const isUnassigned = tableName === 'Unassigned';
+
+              return (
+                <div
+                  key={tableName}
+                  className={`bg-white dark:bg-slate-900 p-5 rounded-2xl border transition shadow-sm space-y-4 ${
+                    isUnassigned
+                      ? 'border-dashed border-amber-300 dark:border-amber-700/60 bg-amber-50/20 dark:bg-amber-950/20'
+                      : 'border-slate-200 dark:border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                        {tableName}
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {isUnassigned ? `${seatedGuests.length} unseated guests` : `${count} of ${tableCapacity} seats filled`}
+                      </p>
+                    </div>
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                      isUnassigned
+                        ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
+                        : count > tableCapacity
+                        ? 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300'
+                        : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                    }`}>
+                      {isUnassigned ? 'Action Needed' : count > tableCapacity ? 'Over capacity' : 'Optimal'}
+                    </span>
+                  </div>
+
+                  {/* Seat dots representation */}
+                  {!isUnassigned && (
+                    <div className="flex items-center gap-1.5 py-1">
+                      {Array.from({ length: tableCapacity }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`w-3.5 h-3.5 rounded-full transition ${
+                            i < count
+                              ? 'bg-indigo-600 dark:bg-indigo-400'
+                              : 'bg-slate-200 dark:bg-slate-700'
+                          }`}
+                          title={i < count ? `Occupied seat ${i + 1}` : `Open seat ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Guest badges */}
+                  <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    {seatedGuests.map(guest => (
+                      <div
+                        key={guest.id}
+                        onClick={() => {
+                          setEditingGuest(guest);
+                          setFormData({
+                            name: guest.name,
+                            email: guest.email || '',
+                            phone: guest.phone || '',
+                            rsvpStatus: guest.rsvpStatus,
+                            dietaryRestrictions: guest.dietaryRestrictions || '',
+                            plusOnes: guest.plusOnes || 0,
+                            tableNumber: guest.tableNumber || '',
+                            notes: guest.notes || '',
+                          });
+                          setShowAddModal(true);
+                        }}
+                        className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 cursor-pointer transition text-xs group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-[10px]">
+                            {guest.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <span className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                              {guest.name}
+                            </span>
+                            {guest.plusOnes > 0 && (
+                              <span className="text-[10px] text-slate-400 ml-1">+{guest.plusOnes}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {guest.dietaryRestrictions && (
+                            <span className="text-[10px] px-1.5 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 rounded border border-amber-200 dark:border-amber-800" title={`Dietary: ${guest.dietaryRestrictions}`}>
+                              {guest.dietaryRestrictions}
+                            </span>
+                          )}
+                          <span className={`w-2 h-2 rounded-full ${
+                            guest.rsvpStatus === 'confirmed' || guest.rsvpStatus === 'attending'
+                              ? 'bg-emerald-500'
+                              : guest.rsvpStatus === 'declined'
+                              ? 'bg-red-500'
+                              : 'bg-amber-500'
+                          }`} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Add / Edit Modal */}
       {showAddModal && (
